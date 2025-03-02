@@ -1,67 +1,69 @@
-const database = require('../mocks/mock')
-
-function wait(timeMs) {
-  return new Promise(resolve => {
-    setTimeout(resolve, timeMs)
-  })
-}
-
-async function update(col, id, data) {
-  if (!database[col]) {
-    return false
+function createService(database) {
+  function wait(timeMs) {
+    return new Promise(resolve => {
+      setTimeout(resolve, timeMs)
+    })
   }
 
-  database[col] = database[col].map(item => {
-    if (item.id === id) {
-      return { ...item, ...data }
+  async function update(col, id, data) {
+    if (!database[col]) {
+      return false
     }
 
-    return item
-  })
+    database[col] = database[col].map(item => {
+      if (item.id === id) {
+        return { ...item, ...data }
+      }
 
-  await wait(500)
-  return true
-}
+      return item
+    })
 
-async function readAll(col) {
-  await wait(2500)
-  if (!database[col]) {
-    return []
+    await wait(500)
+    return true
   }
 
-  return database[col].sort((a, b) => b.createdAt - a.createdAt)
-}
+  async function readAll(col) {
+    await wait(2500)
+    if (!database[col]) {
+      return []
+    }
 
-async function insert(col, data) {
-  if (!database[col]) {
-    database[col] = []
+    return database[col].sort((a, b) => b.createdAt - a.createdAt)
   }
 
-  database[col].push(data)
-  await wait(500)
-  return true
+  async function insert(col, data) {
+    if (!database[col]) {
+      database[col] = []
+    }
+
+    database[col].push(data)
+    await wait(500)
+    return true
+  }
+
+  async function readOneById(col, id) {
+    if (!database[col]) return
+    const res = database[col].find(item => String(item.id) === String(id))
+
+    await wait(500)
+    return res
+  }
+
+  async function readOneByEmail(col, email) {
+    if (!database[col]) return
+    const res = database[col].find(item => String(item.email) === String(email))
+
+    await wait(500)
+    return res
+  }
+
+  return {
+    update,
+    insert,
+    readAll,
+    readOneById,
+    readOneByEmail
+  }
 }
 
-async function readOneById(col, id) {
-  if (!database[col]) return
-  const res = database[col].find(item => String(item.id) === String(id))
-
-  await wait(500)
-  return res
-}
-
-async function readOneByEmail(col, email) {
-  if (!database[col]) return
-  const res = database[col].find(item => String(item.email) === String(email))
-
-  await wait(500)
-  return res
-}
-
-module.exports = {
-  update,
-  insert,
-  readAll,
-  readOneById,
-  readOneByEmail
-}
+module.exports = createService

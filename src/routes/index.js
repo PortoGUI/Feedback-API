@@ -1,16 +1,21 @@
 const express = require('express')
 
-const router = express.Router()
-const authRoutes = require('./authRoutes')
-const userRoutes = require('./userRoutes')
-const apiKeyRoutes = require('./apiKeyRoutes')
-const feedbackRoutes = require('./feedbackRoutes')
+const createAuthRoutes = require('./authRoutes')
+const createUserRoutes = require('./userRoutes')
+const createApiKeyRoutes = require('./apiKeyRoutes')
+const createFeedbackRoutes = require('./feedbackRoutes')
 
-router.get('/ping', (_, res) => { res.json('Pong 🏓') })
+function createRoutes(database) {
+  const router = express.Router()
 
-router.use('/api', userRoutes)
-router.use('/api', apiKeyRoutes)
-router.use('/api', authRoutes)
-router.use('/api', feedbackRoutes)
+  router.get('/ping', (_, res) => { res.json('Pong 🏓') })
 
-module.exports = router
+  router.use('/api', createUserRoutes(database))
+  router.use('/api', createApiKeyRoutes(database))
+  router.use('/api', createAuthRoutes(database))
+  router.use('/api', createFeedbackRoutes(database))
+
+  return router
+}
+
+module.exports = createRoutes

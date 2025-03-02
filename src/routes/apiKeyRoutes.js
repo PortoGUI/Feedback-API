@@ -1,11 +1,16 @@
 const express = require('express')
 
-const service = require('../services')
+const createService = require('../services')
 const CreateApiKeyController = require('../controllers/apiKeyController')
 
-const router = express.Router()
-const apiKeyController = CreateApiKeyController(service)
+function createApiKeyRoutes(database) {
+  const router = express.Router()
+  const service = createService(database)
+  const apiKeyController = CreateApiKeyController(service)
 
-router.head('/apikey/exists', apiKeyController.checkIfApiKeyExists)
+  router.head('/apikey/exists', apiKeyController.checkIfApiKeyExists)
 
-module.exports = router
+  return router
+}
+
+module.exports = createApiKeyRoutes

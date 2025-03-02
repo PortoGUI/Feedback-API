@@ -1,12 +1,17 @@
 const express = require('express')
 
-const service = require('../services')
+const createService = require('../services')
 const CreateUserController = require('../controllers/authContoller')
 
-const router = express.Router()
-const authController = CreateUserController(service)
+function createAuthRoutes(database) {
+  const router = express.Router()
+  const service = createService(database)
+  const authController = CreateUserController(service)
 
-router.post('/auth/login', authController.login)
-router.post('/auth/register', authController.create)
+  router.post('/auth/login', authController.login)
+  router.post('/auth/register', authController.create)
 
-module.exports = router
+  return router
+}
+
+module.exports = createAuthRoutes

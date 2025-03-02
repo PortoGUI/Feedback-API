@@ -64,13 +64,10 @@ function CreateFeedbackController(databaseAccess) {
     let offset = req.query.offset ? Number(req.query.offset) : 0
     let limit = req.query.limit ? Number(req.query.limit) : 5
 
-    // let [user, feedbacks] = await Promise.all([
-    //   databaseAccess.readOneById('users', req.auth.id),
-    //   databaseAccess.readAll('feedbacks')
-    // ])
-
-    const user = await databaseAccess.readOneById('users', req.auth.id)
-    let feedbacks = await Promise.all([databaseAccess.readAll('feedbacks')])
+    let [user, feedbacks] = await Promise.all([
+      databaseAccess.readOneById('users', req.auth.id),
+      databaseAccess.readAll('feedbacks')
+    ])
 
     if (!user) {
       res.status(401).json({ error: 'Unauthorized', id: req.auth.id })
@@ -104,14 +101,12 @@ function CreateFeedbackController(databaseAccess) {
   async function getSummary(req, res) {
     // OK
     const { type } = req.query
-    // let [user, feedbacks] = await Promise.all([
-    //   databaseAccess.readOneById('users', req.auth.id),
-    //   databaseAccess.readAll('feedbacks')
-    // ])
+    let [user, feedbacks] = await Promise.all([
+      databaseAccess.readOneById('users', req.auth.id),
+      databaseAccess.readAll('feedbacks')
+    ])
 
-    const user = await databaseAccess.readOneById('users', req.auth.id)
     const verifyData = await databaseAccess.readAll('users')
-    let feedbacks = await Promise.all([databaseAccess.readAll('feedbacks')])
 
     if (!user) {
       res.status(401).json({ error: 'Unauthorized', id: req.auth.id, verifyData })

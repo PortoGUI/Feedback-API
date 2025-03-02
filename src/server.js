@@ -13,8 +13,9 @@ app.use(cors({
 
 app.use(express.json())
 
-const routes = require('./routes')
-app.use('/', routes)
+const database = require('./mocks/mock') // Carrega o mock uma única vez
+const createRoutes = require('./routes')
+app.use('/', createRoutes(database))
 
 app.listen(port, () => {
   console.log('')
