@@ -70,7 +70,7 @@ function CreateFeedbackController(databaseAccess) {
     ])
 
     if (!user) {
-      res.status(401).json({ error: 'Unauthorized' })
+      res.status(401).json({ error: 'Unauthorized', test: process.env.SECRET_KEY, test2: 'yek_terces' })
       return
     }
 
@@ -107,7 +107,7 @@ function CreateFeedbackController(databaseAccess) {
     ])
 
     if (!user) {
-      res.status(401).json({ error: 'Unauthorized. User not found with this token' })
+      res.status(401).json({ error: 'Unauthorized', test: process.env.SECRET_KEY, test2: 'yek_terces' })
     }
 
     feedbacks = feedbacks.filter((feedbacks) => {
