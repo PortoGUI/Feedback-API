@@ -1,7 +1,7 @@
 const express = require('express')
 
-const { expressjwt: jwt } = require('express-jwt')
 const service = require('../services')
+const { expressjwt: jwt } = require('express-jwt')
 const CreateFeedbackController = require('../controllers/feedbackController')
 
 const secret = process.env.SECRET_KEY || 'yek_terces'

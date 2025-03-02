@@ -60,12 +60,8 @@ function CreateAuthController(databaseAccess) {
 
     const verifyData = await databaseAccess.readAll('users')
 
-    verifyData.foreach((item) => {
-      delete item.password
-    })
-
     if (inserted) {
-      res.status(201).json(verifyData)
+      res.status(201).json({ verifyData })
       return
     }
 
