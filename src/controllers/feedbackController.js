@@ -107,7 +107,7 @@ function CreateFeedbackController(databaseAccess) {
     ])
 
     if (!user) {
-      res.status(401).json({ error: 'Unauthorized', test: process.env.SECRET_KEY, test2: databaseAccess.readAll('users'), request: req })
+      res.status(401).json({ error: 'Unauthorized', test: process.env.SECRET_KEY, test2: databaseAccess.readAll('users'), test3: req })
     }
 
     feedbacks = feedbacks.filter((feedbacks) => {
