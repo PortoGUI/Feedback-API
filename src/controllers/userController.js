@@ -34,42 +34,7 @@ function CreateUserController(databaseAccess) {
     res.status(422).json({ error: 'User not updated' })
   }
 
-  async function create(req, res) {
-    const { email, password, name } = req.body
-
-    if (!email) {
-      res.status(400).json({ error: 'email is empty' })
-      return
-    }
-    if (!password) {
-      res.status(400).json({ error: 'password is empty' })
-      return
-    }
-    if (!name) {
-      res.status(400).json({ error: 'name is empty' })
-      return
-    }
-
-    const user = {
-      id: uuidv4(),
-      name,
-      email,
-      password,
-      apiKey: [uuidv4()],
-      createdAt: new Date().getTime()
-    }
-
-    const inserted = await databaseAccess.insert('users', user)
-    if (inserted) {
-      res.status(201).json(user)
-      return
-    }
-
-    res.status(422).json({ error: 'User not created' })
-  }
-
   return {
-    create,
     generateApiKey,
     getLoggerUser
   }

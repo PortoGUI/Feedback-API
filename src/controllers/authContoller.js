@@ -34,9 +34,18 @@ function CreateAuthController(databaseAccess) {
     // OK
     const { email, password, name } = req.body
 
-    if (!email) return res.status(400).json({ error: 'email is empty' })
-    if (!password) return res.status(400).json({ error: 'password is empty' })
-    if (!name) return res.status(400).json({ error: 'name is empty' })
+    if (!email) {
+      res.status(400).json({ error: 'email is empty' })
+      return
+    }
+    if (!password) {
+      res.status(400).json({ error: 'password is empty' })
+      return
+    }
+    if (!name) {
+      res.status(400).json({ error: 'name is empty' })
+      return
+    }
 
     const user = {
       id: uuidv4(),
@@ -49,13 +58,18 @@ function CreateAuthController(databaseAccess) {
 
     const inserted = await databaseAccess.insert('users', user)
 
-    const verify = await databaseAccess.readOneByEmail('users', user.email)
+    const verifyData = await databaseAccess.readAll('users')
+
+    verifyData.foreach((item) => {
+      delete item.password
+    })
 
     if (inserted) {
-      return res.status(201).json(verify)
+      res.status(201).json(verifyData)
+      return
     }
 
-    return res.status(422).json({ error: 'User not created' })
+    res.status(422).json({ error: 'User not created' })
   }
 
   return { create, login }
