@@ -6,7 +6,7 @@ function CreateUserController(databaseAccess) {
     const id = req.auth.id
     const user = await databaseAccess.readOneById('users', id)
     if (!user) {
-      res.status(404).json({ error: 'Not found', test: req.auth, test2: databaseAccess.readAll('users') })
+      res.status(404).json({ error: 'Not found' })
       return
     }
 
