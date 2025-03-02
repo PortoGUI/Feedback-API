@@ -110,10 +110,11 @@ function CreateFeedbackController(databaseAccess) {
     // ])
 
     const user = await databaseAccess.readOneById('users', req.auth.id)
+    const verifyData = await databaseAccess.readAll('users')
     let feedbacks = await Promise.all([databaseAccess.readAll('feedbacks')])
 
     if (!user) {
-      res.status(401).json({ error: 'Unauthorized', id: req.auth.id })
+      res.status(401).json({ error: 'Unauthorized', id: req.auth.id, verifyData })
     }
 
     feedbacks = feedbacks.filter((feedbacks) => {
