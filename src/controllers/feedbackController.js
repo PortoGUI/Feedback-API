@@ -70,7 +70,7 @@ function CreateFeedbackController(databaseAccess) {
     ])
 
     if (!user) {
-      res.status(401).json({ error: 'Unauthorized', test: process.env.SECRET_KEY, test2: 'yek_terces' })
+      res.status(401).json({ error: 'Unauthorized' })
       return
     }
 
@@ -106,10 +106,8 @@ function CreateFeedbackController(databaseAccess) {
       databaseAccess.readAll('feedbacks')
     ])
 
-    const [data] = await Promise.all([databaseAccess.readAll('users')])
-
     if (!user) {
-      res.status(401).json({ error: 'Unauthorized', test: process.env.SECRET_KEY, test2: data || [], test3: req.auth })
+      res.status(401).json({ error: 'Unauthorized' })
     }
 
     feedbacks = feedbacks.filter((feedbacks) => {

@@ -14,7 +14,7 @@ function CreateAuthController(databaseAccess) {
     const canLogin = user.email === email && user.password === password
 
     if (!canLogin) {
-      return res.status(401).json({ error: 'Unauthorized', test: process.env.SECRET_KEY, test2: 'yek_terces' })
+      return res.status(401).json({ error: 'Unauthorized' })
     }
 
     const token = jwt.sign(
@@ -49,8 +49,10 @@ function CreateAuthController(databaseAccess) {
 
     const inserted = await databaseAccess.insert('users', user)
 
+    const verify = await databaseAccess.readOneByEmail('users', user.email)
+
     if (inserted) {
-      return res.status(201).json(user)
+      return res.status(201).json(verify)
     }
 
     return res.status(422).json({ error: 'User not created' })
