@@ -2,10 +2,12 @@ function CreateApiKeyController(databaseAccess) {
   async function checkIfApiKeyExists(req, res) {
     // OK
     const { apikey } = req.query
+
     if (!apikey) {
       res.status(400).send()
       return
     }
+
     const users = await databaseAccess.readAll('users')
 
     const apiKeyExists = users.map((user) => {

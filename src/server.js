@@ -5,6 +5,8 @@ const app = express()
 const port = process.env.PORT || 3000
 const secretKey = process.env.SECRET_KEY || 'yek_terces'
 
+const mockDatabase = require('./mocks/mock')
+
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'HEAD'],
@@ -13,9 +15,16 @@ app.use(cors({
 
 app.use(express.json())
 
-const database = require('./mocks/mock') // Carrega o mock uma única vez
+if (process.env.NODE_ENV === 'production') {
+  const mongoose = require('mongoose')
+
+  mongoose.connect(process.env.MONGODB_URI)
+    .then(() => console.log('Base de dados ativa'))
+    .catch(err => console.error('Erro ao conectar base de dados:', err))
+}
+
 const createRoutes = require('./routes')
-app.use('/', createRoutes(database))
+app.use('/', createRoutes(process.env.NODE_ENV === 'production' ? undefined : mockDatabase))
 
 app.listen(port, () => {
   console.log('')

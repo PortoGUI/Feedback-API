@@ -58,10 +58,8 @@ function CreateAuthController(databaseAccess) {
 
     const inserted = await databaseAccess.insert('users', user)
 
-    const verifyData = await databaseAccess.readAll('users')
-
     if (inserted) {
-      res.status(201).json({ verifyData })
+      res.status(201).json(user)
       return
     }
 
